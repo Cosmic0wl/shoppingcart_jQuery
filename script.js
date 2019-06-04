@@ -24,20 +24,18 @@ $(document).ready(function() {
     //ALL FUNCTIONS
     function btnAdd(product, i) {
         //if this product already exists then add +1 to its quantity
-        if (cart[i] != undefined) {
-            // cart[i].quantity++;
+        if (cart[i] == undefined) {
             cart[i] = product;
-        } else {
-            cart[i] = product;
+            product.quantity = 1;
+            rewriteCart();
         }
-        rewriteCart();
+        
     }
 
     //overwrites previous cart 
     function rewriteCart() {
         var bought = $("#bought");
         $(bought).html("");
-        console.log(bought);
         for (let j = 0; j < cart.length; j++) {
             if (cart[j] != undefined) {
                 var item = $("<p>" + cart[j].name + "</p>" + "<p>" + cart[j].quantity + "</p>" + "<button class='plus'>+</button>" + "<button class='minus'>-</button>" + "<p>" + cart[j].price * cart[j].quantity + "</p>" + "<button class='delete'>x</button>");
@@ -47,37 +45,22 @@ $(document).ready(function() {
         //takes all minus buttons in the array and applies the remove from cart function to each one of them, if the item exists
         var k = 0;
         var minusButtons = $(".minus");
+        var deleteButtons = $(".delete");
+        var plusButtons = $(".plus");
         for (let j = 0; j < cart.length; j++) {
             if (cart[j] != undefined) {
                 $(minusButtons[k]).click(function() {
                     removeFromCart(j);
                 });
+                 $(deleteButtons[k]).click(function() {
+                    deleteFromCart(j);
+                });
+                  $(plusButtons[k]).click(function() {
+                    addQuantity(j);
+                });
                 k++;
             }
         }
-
-        var h = 0;
-        var deleteButtons = $(".delete");
-        for (let j = 0; j < cart.length; j++) {
-            if (cart[j] != undefined) {
-                $(deleteButtons[h]).click(function() {
-                    deleteFromCart(j);
-                });
-                h++;
-            }
-        }
-
-        var l = 0;
-        var plusButtons = $(".plus");
-        for (let j = 0; j < cart.length; j++) {
-            if (cart[j] != undefined) {
-                $(plusButtons[l]).click(function() {
-                    addQuantity(j);
-                });
-                l++;
-            }
-        }
-
     }
     // if quantity is less or equal to 0 the item does note exist
     function deleteFromCart(i) {
